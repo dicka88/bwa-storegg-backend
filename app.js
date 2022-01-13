@@ -8,6 +8,7 @@ var logger = require('morgan');
 var apiRouter = require('./routes/api/index');
 var indexRouter = require('./routes/admin/index');
 var categoryRouter = require('./routes/admin/categoryRouter');
+const methodOverride = require('method-override');
 
 var app = express();
 
@@ -26,6 +27,7 @@ app.use(cookieParser());
 
 app.use(logger('dev'));
 app.use(express.json());
+app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
