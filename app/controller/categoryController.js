@@ -30,9 +30,37 @@ module.exports = {
     }
   },
   viewDetail: async (req, res) => {
+    const id = req.params.id;
+
+    try {
+      const category = await CategoryModel.findById(id);
+
+      if (!category) throw new Error("Category not found");
+
+      res.render('admin/category/detail', {
+        title: category.name,
+        category
+      });
+    } catch (e) {
+      res.status(404).render("errors/404", { title: "Not found" });
+      console.log(e);
+    }
 
   },
   putDetail: async (req, res) => {
+    const id = req.params.id;
+    const { name } = req.body;
 
+    try {
+      const update = await CategoryModel.updateOne({ id }, { name }, { runValidators: true });
+
+      console.log(update);
+
+      res.redirect('/category');
+
+    } catch (e) {
+      res.status(404);
+
+    }
   }
 }; 
