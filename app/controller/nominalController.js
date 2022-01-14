@@ -25,9 +25,9 @@ module.exports = {
   },
   async postCreate(req, res) {
     try {
-      const { coinQuantitiy, coinName, price } = req.body;
+      const { coinQuantity, coinName, price } = req.body;
 
-      const category = new NominalModel({ coinQuantitiy, coinName, price });
+      const category = new NominalModel({ coinQuantity, coinName, price });
 
       await category.save();
 
@@ -44,13 +44,13 @@ module.exports = {
     const id = req.params.id;
 
     try {
-      const category = await NominalModel.findById(id);
+      const nominal = await NominalModel.findById(id);
 
-      if (!category) throw new Error("Nominal not found");
+      if (!nominal) throw new Error("Nominal not found");
 
       res.render('admin/nominal/detail', {
-        title: category.name,
-        category,
+        title: nominal.name,
+        nominal,
         alert: {
           message: req.flash('alertMessage'),
           status: req.flash('alertStatus')
@@ -63,11 +63,13 @@ module.exports = {
   },
   async putDetail(req, res) {
     const id = req.params.id;
-    const { coinQuantitiy, coinName, price } = req.body;
+    const { coinQuantity, coinName, price } = req.body;
+
+    console.log({ body: req.body });
 
     try {
       const update = await NominalModel.findByIdAndUpdate(id,
-        { coinQuantitiy, coinName, price },
+        { coinQuantity, coinName, price },
         { runValidators: true }
       );
 
