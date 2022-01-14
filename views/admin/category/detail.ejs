@@ -17,7 +17,9 @@
             <div class="page-title">
               <div class="row">
                 <div class="col-12 col-md-6 order-md-1 order-last">
-                  <h3>Create Category</h3>
+                  <h3>
+                    Detail Category <%= category.name %>
+                  </h3>
                 </div>
                 <div class="col-12 col-md-6 order-md-2 order-first">
                   <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -36,16 +38,22 @@
 
                 </div>
                 <div class="card-body">
-                  <form action="/category/<%= category.id %>?_method=PUT" method="POST">
-                    <div class="col-6">
+                  <div class="col-6">
+                    <form action="/category/<%= category.id %>?_method=PUT" method="POST">
                       <div class="form-group">
                         <label for="basicInput">Category name</label>
                         <input type="text" name="name" class="form-control" value="<%= category.name %>"
                           placeholder="Enter category name">
                       </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                  </form>
+                      <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-outline-danger block" data-bs-toggle="modal"
+                          data-bs-target="#default">
+                          Remove
+                        </button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
 
@@ -55,6 +63,38 @@
         </div>
     </div>
     <%- include ../../partials/javascripts.ejs %>
+      <!--Basic Modal -->
+      <div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="myModalLabel1">Remove category <%= category.name %>
+              </h5>
+              <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+                <i data-feather="x"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>
+                Warning, after you remove, category cannot be restored
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn" data-bs-dismiss="modal">
+                <i class="bx bx-x d-block d-sm-none"></i>
+                <span class="d-none d-sm-block">Close</span>
+              </button>
+              <form action="/category/<%= category._id %>?_method=DELETE" method="POST">
+                <button type="submit" class="btn btn-danger ml-1">
+                  <i class="bx bx-check d-block d-sm-none"></i>
+                  <span class="d-none d-sm-block">Remove now</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
   </body>
 
 </html>

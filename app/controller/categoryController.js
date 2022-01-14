@@ -1,7 +1,7 @@
-const CategoryModel = require("../models/categoryModel");
+const CategoryModel = require("../models/CategoryModel");
 
 module.exports = {
-  index: async (req, res) => {
+  async index(req, res) {
     const categories = await CategoryModel.find();
 
     console.log(categories);
@@ -11,25 +11,26 @@ module.exports = {
       categories
     });
   },
-  viewCreate: (req, res) => {
+  viewCreate(req, res) {
     res.render('admin/category/create', {
       title: "Create Category"
     });
   },
-  postCreate: async (req, res) => {
+  async postCreate(req, res) {
     try {
       const { name } = req.body;
 
-      const category = await CategoryModel({ name });
+      const category = new CategoryModel({ name });
+
       await category.save();
 
       res.redirect('/category');
 
     } catch (e) {
-
+      res.redirect('back');
     }
   },
-  viewDetail: async (req, res) => {
+  async viewDetail(req, res) {
     const id = req.params.id;
 
     try {
@@ -47,7 +48,7 @@ module.exports = {
     }
 
   },
-  putDetail: async (req, res) => {
+  async putDetail(req, res) {
     const id = req.params.id;
     const { name } = req.body;
 
@@ -61,6 +62,17 @@ module.exports = {
     } catch (e) {
       res.status(404);
 
+    }
+  },
+  async deleteCategory(req, res) {
+    const id = req.params.id;
+    console.log({ id });
+    try {
+      const result = await CategoryModel.findByIdAndDelete(id);
+
+      res.redirect('/category');
+    } catch (e) {
+      console.log({ e });
     }
   }
 }; 
