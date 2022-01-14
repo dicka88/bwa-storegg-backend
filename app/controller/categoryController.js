@@ -2,18 +2,29 @@ const CategoryModel = require("../models/CategoryModel");
 
 module.exports = {
   async index(req, res) {
-    const categories = await CategoryModel.find();
+    const categories = await CategoryModel.find().sort({ _id: 1 });
 
-    console.log(categories);
+    console.log({
+      message: req.flash('alertMessage'),
+      status: req.flash('alertStatus')
+    });
 
     res.render('admin/category', {
       title: "Category",
-      categories
+      categories,
+      alert: {
+        message: req.flash('alertMessage'),
+        status: req.flash('alertStatus')
+      }
     });
   },
   viewCreate(req, res) {
     res.render('admin/category/create', {
-      title: "Create Category"
+      title: "Create Category",
+      alert: {
+        message: req.flash('alertMessage'),
+        status: req.flash('alertStatus')
+      }
     });
   },
   async postCreate(req, res) {
@@ -24,9 +35,12 @@ module.exports = {
 
       await category.save();
 
+      req.flash('alertMessage', `Successfull create category`);
+      req.flash('alertStatus', 'success');
       res.redirect('/category');
-
     } catch (e) {
+      req.flash('alertMessage', `${e.message}`);
+      req.flash('alertStatus', 'danger');
       res.redirect('back');
     }
   },
@@ -40,11 +54,14 @@ module.exports = {
 
       res.render('admin/category/detail', {
         title: category.name,
-        category
+        category,
+        alert: {
+          message: req.flash('alertMessage'),
+          status: req.flash('alertStatus')
+        }
       });
     } catch (e) {
       res.status(404).render("errors/404", { title: "Not found" });
-      console.log(e);
     }
 
   },
@@ -53,15 +70,15 @@ module.exports = {
     const { name } = req.body;
 
     try {
-      const update = await CategoryModel.updateOne({ id }, { name }, { runValidators: true });
+      const update = await CategoryModel.findByIdAndUpdate(id, { name }, { runValidators: true });
 
-      console.log(update);
-
+      req.flash('alertMessage', `Successfull update category`);
+      req.flash('alertStatus', 'success');
       res.redirect('/category');
-
     } catch (e) {
-      res.status(404);
-
+      req.flash('alertMessage', `${e.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('back');
     }
   },
   async deleteCategory(req, res) {
@@ -70,9 +87,14 @@ module.exports = {
     try {
       const result = await CategoryModel.findByIdAndDelete(id);
 
+      req.flash('alertMessage', `Successfull remove category`);
+      req.flash('alertStatus', 'danger');
       res.redirect('/category');
     } catch (e) {
-      console.log({ e });
+      req.flash('alertMessage', `${e.message}`);
+      req.flash('alertStatus', 'danger');
+
+      res.redirect('/category');
     }
   }
 }; 

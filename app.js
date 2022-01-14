@@ -1,27 +1,35 @@
 require('dotenv').config();
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var apiRouter = require('./routes/api/index');
-var indexRouter = require('./routes/admin/index');
-var categoryRouter = require('./routes/admin/categoryRouter');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const methodOverride = require('method-override');
+const session = require('express-session');
+const flash = require('connect-flash');
 
-var app = express();
+const apiRouter = require('./routes/api/index');
+const indexRouter = require('./routes/admin/index');
+const categoryRouter = require('./routes/admin/categoryRouter');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // session
+app.use(session({
+  secret: "Coba",
+  resave: true,
+  saveUninitialized: true
+}));
 
 // cookie parser
 app.use(cookieParser());
 
 // use connect-flash
+app.use(flash());
 
 // add CORS for specific domain
 
