@@ -4,11 +4,6 @@ module.exports = {
   async index(req, res) {
     const categories = await CategoryModel.find().sort({ _id: 1 });
 
-    console.log({
-      message: req.flash('alertMessage'),
-      status: req.flash('alertStatus')
-    });
-
     res.render('admin/category', {
       title: "Category",
       categories,
