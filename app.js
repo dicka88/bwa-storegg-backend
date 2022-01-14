@@ -9,8 +9,9 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const apiRouter = require('./routes/api/index');
-const indexRouter = require('./routes/admin/index');
+const indexRouter = require('./routes/admin/indexRouter');
 const categoryRouter = require('./routes/admin/categoryRouter');
+const nominalRouter = require('./routes/admin/nominalRouter');
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/category', categoryRouter);
+app.use('/nominal', nominalRouter);
 // app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
