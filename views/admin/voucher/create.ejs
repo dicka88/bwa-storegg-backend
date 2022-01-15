@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ../../partials/header.ejs %>
+
+  <body>
+    <div id="app">
+      <%- include ../../partials/sidebar.ejs %>
+        <div id="main">
+          <header class="mb-3">
+            <a href="#" class="burger-btn d-block d-xl-none">
+              <i class="bi bi-justify fs-3"></i>
+            </a>
+          </header>
+
+          <div class="page-heading">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                  <h3>Create Category</h3>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                  <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                      <li class="breadcrumb-item"><a href="/voucher">Voucher</a></li>
+                      <li class="breadcrumb-item active" aria-current="page">Create</li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <section class="section">
+              <div class="card">
+                <div class="card-header">
+                  <%- include ../../partials/message.ejs %>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <form action="/voucher/create" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                          <label>Games Name</label>
+                          <input type="text" name="name" class="form-control" placeholder="Enter game name">
+                        </div>
+                        <div class="form-group">
+                          <label>Thumbnail</label>
+                          <input type="file" name="thumbnail" accept="image/*" class="form-control"
+                            placeholder="Choose image">
+                        </div>
+                        <div class="form-group">
+                          <label>Category</label>
+                          <select class="form-select choices" name="category">
+                            <% categories.forEach(category=> { %>
+                              <option value="<%= category.id %>">
+                                <%= category.name %>
+                              </option>
+                              <% }) %>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label>Nominal</label>
+                          <select class="form-select choices multiple-remove" placeholder="Select nominal"
+                            multiple="multiple" name="nominals">
+                            <option placeholder>This is a placeholder</option>
+                            <% nominals.forEach(nominal=> { %>
+                              <option value="<%= nominal.id %>">
+                                <%= `${nominal.coinQuantity} ${nominal.coinName} - ${nominal.price}` %>
+                              </option>
+                              <% }) %>
+                          </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                      </form>
+                    </div>
+                    <div class="col-6">
+                      <img class="w-75" src="" id="thumbnail_preview" alt="">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <%- include ../../partials/footer.ejs %>
+        </div>
+    </div>
+    <%- include ../../partials/javascripts.ejs %>
+      <script src="/assets/vendors/choices.js/choices.min.js"></script>
+      <script src="/assets/js/pages/form-element-select.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const thumbnailPreviewReader = (input) => {
+            const [file] = input.files
+            console.log({ file });
+            if (!file) return;
+
+            const reader = new FileReader()
+            reader.onload = (e) => {
+              console.log(e);
+              document.querySelector('#thumbnail_preview').src = e.target.result
+            }
+
+            reader.readAsDataURL(file)
+          }
+
+          document.querySelector('input[name=thumbnail]').addEventListener('change', function () {
+            thumbnailPreviewReader(this)
+          })
+        })
+      </script>
+  </body>
+
+</html>

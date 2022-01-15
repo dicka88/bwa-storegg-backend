@@ -12,6 +12,9 @@ const apiRouter = require('./routes/api/index');
 const indexRouter = require('./routes/admin/indexRouter');
 const categoryRouter = require('./routes/admin/categoryRouter');
 const nominalRouter = require('./routes/admin/nominalRouter');
+const voucherRouter = require('./routes/admin/voucherRouter');
+
+const config = require('./config');
 
 const app = express();
 
@@ -21,7 +24,7 @@ app.set('view engine', 'ejs');
 
 // session
 app.use(session({
-  secret: "Coba",
+  secret: config.secretKey,
   resave: true,
   saveUninitialized: true
 }));
@@ -43,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/category', categoryRouter);
 app.use('/nominal', nominalRouter);
+app.use('/voucher', voucherRouter);
 // app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler

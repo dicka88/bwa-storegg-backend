@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ../../partials/header.ejs %>
+
+  <body>
+    <div id="app">
+      <%- include ../../partials/sidebar.ejs %>
+        <div id="main">
+          <header class="mb-3">
+            <a href="#" class="burger-btn d-block d-xl-none">
+              <i class="bi bi-justify fs-3"></i>
+            </a>
+          </header>
+
+          <div class="page-heading">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-last">
+                  <h3>
+                    <%= voucher.name %> Voucher
+                  </h3>
+                </div>
+                <div class="col-12 col-md-6 order-md-2 order-first">
+                  <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                      <li class="breadcrumb-item"><a href="/voucher">Voucher</a></li>
+                      <li class="breadcrumb-item active" aria-current="page">Create</li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <section class="section">
+              <div class="card">
+                <div class="card-header">
+                  <%- include ../../partials/message.ejs %>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-6">
+                      <form action="/voucher/<%= voucher._id %>?_method=PUT" method="POST"
+                        enctype="multipart/form-data">
+                        <div class="form-group">
+                          <label>Games Name</label>
+                          <input type="text" name="name" value="<%= voucher.name %>" class="form-control"
+                            placeholder="Enter game name">
+                        </div>
+                        <div class="form-group">
+                          <label>Thumbnail</label>
+                          <input type="file" name="thumbnail" accept="image/*" class="form-control"
+                            placeholder="Choose image">
+                        </div>
+                        <div class="form-group">
+                          <label>Category</label>
+                          <select class="form-select choices" name="category">
+                            <% categories.forEach(category=> { %>
+                              <option value="<%= category.id %>" <%=voucher.category.id==category.id ? 'selected' : ''
+                                %>>
+                                <%= category.name %>
+                              </option>
+                              <% }) %>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label>Nominal</label>
+                          <select class="form-select choices multiple-remove" placeholder="Select nominal"
+                            multiple="multiple" name="nominals">
+                            <option placeholder>Select nominal</option>
+                            <% nominals.forEach(nominal=> { %>
+                              <option value="<%= nominal.id %>" <%=voucher.nominals.map(item=>
+                                item.id).includes(nominal.id) ? 'selected' : '' %> >
+                                <%= `${nominal.coinQuantity} ${nominal.coinName} - ${nominal.price}` %>
+                              </option>
+                              <% }) %>
+                          </select>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <button type="submit" class="btn btn-primary">Update</button>
+                          <button type="button" class="btn btn-outline-danger block" data-bs-toggle="modal"
+                            data-bs-target="#default">
+                            Remove
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="col-6">
+                      <img class="w-75" src="<%= `/uploads/${voucher.thumbnail}` %>" id="thumbnail_preview" alt="">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+          <%- include ../../partials/footer.ejs %>
+        </div>
+    </div>
+    <!--Basic Modal -->
+    <div class="modal fade text-left" id="default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1"
+      aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModalLabel1">Remove category <%= voucher.name %>
+            </h5>
+            <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+              <i data-feather="x"></i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Warning, after you remove, category cannot be restored
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn" data-bs-dismiss="modal">
+              <i class="bx bx-x d-block d-sm-none"></i>
+              <span class="d-none d-sm-block">Close</span>
+            </button>
+            <form action="/voucher/<%= voucher._id %>?_method=DELETE" method="POST">
+              <button type="submit" class="btn btn-danger ml-1">
+                <i class="bx bx-check d-block d-sm-none"></i>
+                <span class="d-none d-sm-block">Remove now</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include ../../partials/javascripts.ejs %>
+      <script src="/assets/vendors/choices.js/choices.min.js"></script>
+      <script src="/assets/js/pages/form-element-select.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const thumbnailPreviewReader = (input) => {
+            const [file] = input.files
+            console.log({ file });
+            if (!file) return;
+
+            const reader = new FileReader()
+            reader.onload = (e) => {
+              console.log(e);
+              document.querySelector('#thumbnail_preview').src = e.target.result
+            }
+
+            reader.readAsDataURL(file)
+          }
+
+          document.querySelector('input[name=thumbnail]').addEventListener('change', function () {
+            thumbnailPreviewReader(this)
+          })
+        })
+      </script>
+  </body>
+
+</html>
