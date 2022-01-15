@@ -65,8 +65,6 @@ module.exports = {
     const id = req.params.id;
     const { coinQuantity, coinName, price } = req.body;
 
-    console.log({ body: req.body });
-
     try {
       const update = await NominalModel.findByIdAndUpdate(id,
         { coinQuantity, coinName, price },
