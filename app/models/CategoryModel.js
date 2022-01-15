@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const schema = mongoose.Schema({
+const Schema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name is required"]
   }
 });
 
-module.exports = mongoose.model('category', schema);
+module.exports = mongoose.model('category', Schema);
