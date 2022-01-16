@@ -48,7 +48,6 @@
                         <th>Name</th>
                         <th>Category</th>
                         <th>Nominal</th>
-                        <th>Price</th>
                         <th>Status</th>
                         <th></th>
                       </tr>
@@ -77,14 +76,16 @@
                               <% })%>
                           </td>
                           <td>
-                            <% if (item.active) { %>
-                              <div class="badge bg-success">Active</div>
-                              <% } else { %>
-                                <div class="badge bg-warning">Non Active</div>
-                                <% } %>
+                            <a href="/voucher/<%= item._id %>">Detail</a>
                           </td>
                           <td>
-                            <a href="/voucher/<%= item._id %>">Detail</a>
+                            <div class="form-check form-switch">
+                              <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" <%=item.active
+                                ? 'checked' :'' %>>
+                              <label class="form-check-label" for="flexSwitchCheckDefault">
+                                Active
+                              </label>
+                            </div>
                           </td>
                         </tr>
                         <% }) %>
