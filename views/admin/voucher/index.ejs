@@ -79,13 +79,15 @@
                             <a href="/voucher/<%= item._id %>">Detail</a>
                           </td>
                           <td>
-                            <div class="form-check form-switch">
-                              <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" <%=item.active
-                                ? 'checked' :'' %>>
-                              <label class="form-check-label" for="flexSwitchCheckDefault">
-                                Active
-                              </label>
-                            </div>
+                            <form action="/voucher/status/<%= item.id %>?_method=PUT" method="POST">
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" data-action="submit-form" <%=item.active
+                                  ? 'checked' :'' %>>
+                                <label class="form-check-label">
+                                  Active
+                                </label>
+                              </div>
+                            </form>
                           </td>
                         </tr>
                         <% }) %>
@@ -105,6 +107,17 @@
         // Simple Datatable
         let table1 = document.querySelector('#table1');
         let dataTable = new simpleDatatables.DataTable(table1);
+
+        const togglerActivatedStatus = document.querySelectorAll('[data-action="submit-form"]');
+
+        togglerActivatedStatus?.forEach(node => {
+          node.addEventListener('change', e => {
+            e.preventDefault();
+            const isChecked = e.target.checked;
+            let form = node.closest('form');
+            form.submit();
+          });
+        });
       </script>
   </body>
 

@@ -29,6 +29,7 @@ router.get('/create', voucherController.viewCreate);
 router.post('/create', uploadThumbnail, voucherController.postCreate);
 router.get('/:id', voucherController.viewDetail);
 router.put('/:id', uploadThumbnail, voucherController.putDetail);
-router.delete('/:id', voucherController.deleteNominal);
+router.delete('/:id', voucherController.deleteVoucher);
+router.put('/status/:id', voucherController.updateStatus);
 
 module.exports = router;

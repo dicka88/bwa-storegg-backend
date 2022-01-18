@@ -111,7 +111,7 @@ module.exports = {
       res.redirect('back');
     }
   },
-  async deleteNominal(req, res) {
+  async deleteVoucher(req, res) {
     const id = req.params.id;
 
     try {
@@ -119,6 +119,25 @@ module.exports = {
 
       req.flash('alertMessage', `Successfull remove voucher`);
       req.flash('alertStatus', 'danger');
+      res.redirect('/voucher');
+    } catch (e) {
+      req.flash('alertMessage', `${e.message}`);
+      req.flash('alertStatus', 'danger');
+
+      res.redirect('/voucher');
+    }
+  },
+  async updateStatus(req, res) {
+    const id = req.params.id;
+
+    try {
+      const voucher = await VoucherModel.findById(id);
+
+      voucher.active = !voucher.active;
+      await voucher.save();
+
+      req.flash('alertMessage', `Successfull ${voucher.active ? 'Activated' : 'Deactivated'} voucher`);
+      req.flash('alertStatus', 'success');
       res.redirect('/voucher');
     } catch (e) {
       req.flash('alertMessage', `${e.message}`);
