@@ -13,6 +13,7 @@ const indexRouter = require('./routes/admin/indexRouter');
 const categoryRouter = require('./routes/admin/categoryRouter');
 const nominalRouter = require('./routes/admin/nominalRouter');
 const voucherRouter = require('./routes/admin/voucherRouter');
+const bankRouter = require('./routes/admin/bankRouter');
 
 const config = require('./config');
 
@@ -47,6 +48,7 @@ app.use('/', indexRouter);
 app.use('/category', categoryRouter);
 app.use('/nominal', nominalRouter);
 app.use('/voucher', voucherRouter);
+app.use('/bank', bankRouter);
 // app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
