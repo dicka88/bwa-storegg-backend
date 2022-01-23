@@ -5,8 +5,6 @@ module.exports = {
   async index(req, res) {
     const banks = await BankModel
       .find()
-      .populate('category')
-      .populate('nominals')
       .sort({ _id: 1 });
 
     res.render('admin/bank', {
