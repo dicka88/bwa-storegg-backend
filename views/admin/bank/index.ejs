@@ -34,7 +34,7 @@
               <div class="card">
                 <div class="card-header">
                   <%- include ../../partials/message.ejs %>
-                    <a href="/nominal/create" class="btn btn-primary">
+                    <a href="/bank/create" class="btn btn-primary">
                       <i class="bi bi-plus"></i>
                       Create
                     </a>
@@ -44,29 +44,29 @@
                     <thead>
                       <tr>
                         <th>No</th>
-                        <th>Coin Name</th>
-                        <th>Coin Quantity</th>
-                        <th>Price</th>
+                        <th>Account Name</th>
+                        <th>Bank Name</th>
+                        <th>Account Number</th>
                         <th></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <% nominals.forEach((item, i)=> { %>
+                      <% banks.forEach((item, i)=> { %>
                         <tr>
                           <td>
                             <%= i + 1 %>
                           </td>
                           <td>
-                            <%= item.coinName %>
+                            <%= item.name %>
                           </td>
                           <td>
-                            <%= item.coinQuantity %>
+                            <%= item.bankName %>
                           </td>
                           <td>
-                            <%= item.price %>
+                            <%= item.bankAccountNumber %>
                           </td>
                           <td>
-                            <a href="/nominal/<%= item._id %>">Detail</a>
+                            <a href="/bank/<%= item._id %>">Detail</a>
                           </td>
                         </tr>
                         <% }) %>
