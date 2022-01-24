@@ -1,6 +1,9 @@
 const index = (req, res) => {
   res.render('admin/index', {
-    title: "Dashboard"
+    title: "Dashboard",
+    alert: {
+      alreadyLogged: req.flash('alreadyLogged')
+    }
   });
 };
 
