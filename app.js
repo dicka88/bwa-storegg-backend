@@ -9,6 +9,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const apiRouter = require('./routes/api/index');
+const authRouter = require('./routes/admin/authRouter');
 const dashboardRouter = require('./routes/admin/dashboardRouter');
 const categoryRouter = require('./routes/admin/categoryRouter');
 const nominalRouter = require('./routes/admin/nominalRouter');
@@ -17,6 +18,7 @@ const bankRouter = require('./routes/admin/bankRouter');
 const paymentRouter = require('./routes/admin/paymentRouter');
 
 const config = require('./config');
+const { authenticate } = require('./app/middleware/authMiddleware');
 
 const app = express();
 
@@ -45,13 +47,15 @@ app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/dashboard', dashboardRouter);
-app.use('/category', categoryRouter);
-app.use('/nominal', nominalRouter);
-app.use('/voucher', voucherRouter);
-app.use('/bank', bankRouter);
-app.use('/payment', paymentRouter);
-// app.use('/api', apiRouter);
+app.use('/', authRouter);
+app.use('/dashboard', authenticate, dashboardRouter);
+app.use('/category', authenticate, categoryRouter);
+app.use('/nominal', authenticate, nominalRouter);
+app.use('/voucher', authenticate, voucherRouter);
+app.use('/bank', authenticate, bankRouter);
+app.use('/payment', authenticate, paymentRouter);
+
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
