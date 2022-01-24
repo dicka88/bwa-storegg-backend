@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const { ObjectId } = mongoose.Types;
-
 const Schema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,19 +10,23 @@ const Schema = new mongoose.Schema({
     required: [true, "Password is required"]
   },
   email: {
-    type: String
+    type: String,
+    required: [true, "Email is required"]
+  },
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "admin"
   },
   avatarPhoto: {
     type: String
   },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
+  isActive: {
+    type: Boolean,
+    default: false
   }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('users', Schema);
