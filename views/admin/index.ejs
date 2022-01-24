@@ -3,26 +3,28 @@
 
 <%- include ../partials/header.ejs %>
 
-  <body>
-    <div id="app">
-      <%- include ../partials/sidebar.ejs %>
-        <div id="main">
-          <header class="mb-3">
-            <a href="#" class="burger-btn d-block d-xl-none">
-              <i class="bi bi-justify fs-3"></i>
-            </a>
-          </header>
+<body>
+  <div id="app">
+    <%- include ../partials/sidebar.ejs %>
+    <div id="main">
+      <%- include ../partials/navbar.ejs %>
 
-          <div class="page-heading">
-            <h3>Dashboard</h3>
-          </div>
-          <div class="page-content">
-            Menghello world
-          </div>
-          <%- include ../partials/footer.ejs %>
-        </div>
+      <% if(alert.alreadyLogged.length) { %>
+      <div class="alert alert-success alert-dismissible show fade">
+        <%= alert.alreadyLogged %>
+      </div>
+      <% } %>
+
+      <div class="page-heading">
+        <h3>Dashboard</h3>
+      </div>
+      <div class="page-content">
+        Menghello world
+      </div>
+      <%- include ../partials/footer.ejs %>
     </div>
-    <%- include ../partials/javascripts.ejs %>
-  </body>
+  </div>
+  <%- include ../partials/javascripts.ejs %>
+</body>
 
 </html>
