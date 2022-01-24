@@ -113,10 +113,10 @@ module.exports = {
     try {
       const payment = await PaymentModel.findById(id);
 
-      payment.active = !payment.active;
+      payment.status = !payment.status;
       await payment.save();
 
-      req.flash('alertMessage', `Successfull ${payment.active ? 'Activated' : 'Deactivated'} payment`);
+      req.flash('alertMessage', `Successfull ${payment.status ? 'Activated' : 'Deactivated'} payment`);
       req.flash('alertStatus', 'success');
     } catch (e) {
       req.flash('alertMessage', `${e.message}`);
