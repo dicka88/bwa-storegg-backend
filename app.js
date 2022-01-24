@@ -7,6 +7,7 @@ const logger = require('morgan');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
+const MongoStore = require('connect-mongo');
 
 const apiRouter = require('./routes/api/index');
 const authRouter = require('./routes/admin/authRouter');
@@ -19,6 +20,7 @@ const paymentRouter = require('./routes/admin/paymentRouter');
 
 const config = require('./config');
 const { authenticate } = require('./app/middleware/authMiddleware');
+const { mongoDbUrl } = require('./config');
 
 const app = express();
 
@@ -28,6 +30,9 @@ app.set('view engine', 'ejs');
 
 // session
 app.use(session({
+  store: MongoStore.create({
+    mongoUrl: mongoDbUrl
+  }),
   secret: config.secretKey,
   resave: true,
   saveUninitialized: true
