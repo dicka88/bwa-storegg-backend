@@ -9,7 +9,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 const apiRouter = require('./routes/api/index');
-const indexRouter = require('./routes/admin/indexRouter');
+const dashboardRouter = require('./routes/admin/dashboardRouter');
 const categoryRouter = require('./routes/admin/categoryRouter');
 const nominalRouter = require('./routes/admin/nominalRouter');
 const voucherRouter = require('./routes/admin/voucherRouter');
@@ -45,7 +45,7 @@ app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/dashboard', dashboardRouter);
 app.use('/category', categoryRouter);
 app.use('/nominal', nominalRouter);
 app.use('/voucher', voucherRouter);
