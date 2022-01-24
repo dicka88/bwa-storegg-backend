@@ -5,6 +5,8 @@ const Schema = new mongoose.Schema({
     type: String,
     required: [true, "Name is required"]
   }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('category', Schema);

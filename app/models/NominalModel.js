@@ -15,6 +15,8 @@ const Schema = new mongoose.Schema({
     default: 0,
     required: [true, "Price is required"]
   }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('nominal', Schema);
