@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: [true, "Type is required"]
   },
-  status: {
+  isActive: {
     type: Boolean,
     default: true
   },
@@ -15,6 +15,8 @@ const schema = new mongoose.Schema({
     type: ObjectId,
     ref: 'bank'
   }]
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('payment', schema); 
