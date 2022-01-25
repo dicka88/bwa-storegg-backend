@@ -9,6 +9,7 @@ module.exports = {
 
     // make session accessable globally on view
     res.locals.session = req.session;
+    res.locals.req = req;
 
     next();
   }
