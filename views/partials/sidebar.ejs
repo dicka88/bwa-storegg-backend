@@ -1,3 +1,7 @@
+<% 
+  const currentPath = req.baseUrl
+%>
+
 <div id="sidebar" class="active">
   <div class="sidebar-wrapper active">
     <div class="sidebar-header">
@@ -12,30 +16,30 @@
     </div>
     <div class="sidebar-menu">
       <ul class="menu">
-        <li class="sidebar-item active ">
-          <a href="/dashboard" class='sidebar-link'>
+        <li class="sidebar-item <%= currentPath == '/dashboard' && 'active' %>">
+          <a href="/dashboard/" class='sidebar-link'>
             <i class="bi bi-grid-fill"></i>
             <span>Dashboard</span>
           </a>
         </li>
 
         <li class="sidebar-title">Master</li>
-        <li class="sidebar-item ">
-          <a href="/category" class='sidebar-link'>
+        <li class="sidebar-item <%= currentPath == '/category' && 'active' %>">
+          <a href="/category/" class='sidebar-link'>
             <i class="bi bi-card-list"></i>
             <span>Category</span>
           </a>
         </li>
 
-        <li class="sidebar-item ">
-          <a href="/nominal" class='sidebar-link'>
+        <li class="sidebar-item <%= currentPath == '/nominal' && 'active' %>">
+          <a href="/nominal/" class='sidebar-link'>
             <i class="bi bi-cash"></i>
             <span>Nominal</span>
           </a>
         </li>
 
-        <li class="sidebar-item ">
-          <a href="/voucher" class='sidebar-link'>
+        <li class="sidebar-item <%= currentPath == '/voucher' && 'active' %>">
+          <a href="/voucher/" class='sidebar-link'>
             <i class="bi bi-ticket"></i>
             <span>Voucher</span>
           </a>
@@ -43,15 +47,15 @@
 
         <li class="sidebar-title">Payment Method</li>
 
-        <li class="sidebar-item ">
-          <a href="/bank" class='sidebar-link'>
+        <li class="sidebar-item <%= currentPath == '/bank' && 'active' %>">
+          <a href="/bank/" class='sidebar-link'>
             <i class="bi bi-bank"></i>
             <span>Banks</span>
           </a>
         </li>
 
-        <li class="sidebar-item ">
-          <a href="/payment" class='sidebar-link'>
+        <li class="sidebar-item <%= currentPath == '/payment' && 'active' %>">
+          <a href="/payment/" class='sidebar-link'>
             <i class="bi bi-credit-card"></i>
             <span>Payments</span>
           </a>
@@ -59,8 +63,8 @@
 
         <li class="sidebar-title">Transaction and Recap</li>
 
-        <li class="sidebar-item ">
-          <a href="/transaction" class='sidebar-link'>
+        <li class="sidebar-item <%= currentPath == '/transaction' && 'active' %>">
+          <a href="/transaction/" class='sidebar-link'>
             <i class="bi bi-credit-card"></i>
             <span>Transaction</span>
           </a>
