@@ -17,6 +17,7 @@ const nominalRouter = require('./routes/admin/nominalRouter');
 const voucherRouter = require('./routes/admin/voucherRouter');
 const bankRouter = require('./routes/admin/bankRouter');
 const paymentRouter = require('./routes/admin/paymentRouter');
+const transactionRouter = require('./routes/admin/transactionRouter');
 
 const config = require('./config');
 const { authenticate } = require('./app/middleware/authMiddleware');
@@ -59,6 +60,7 @@ app.use('/nominal', authenticate, nominalRouter);
 app.use('/voucher', authenticate, voucherRouter);
 app.use('/bank', authenticate, bankRouter);
 app.use('/payment', authenticate, paymentRouter);
+app.use('/transaction', authenticate, transactionRouter);
 
 app.use('/api', apiRouter);
 

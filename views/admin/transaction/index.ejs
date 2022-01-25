@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ../../partials/header.ejs %>
+
+<body>
+  <div id="app">
+    <%- include ../../partials/sidebar.ejs %>
+    <div id="main">
+      <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+          <i class="bi bi-justify fs-3"></i>
+        </a>
+      </header>
+
+      <div class="page-heading">
+        <div class="page-title">
+          <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+              <h3>Transaction</h3>
+              <p class="text-subtitle text-muted">For user to check they list</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+              <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Transaction</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <section class="section">
+          <div class="card">
+            <div class="card-header">
+              <%- include ../../partials/message.ejs %>
+              <!-- <a href="/voucher/create" class="btn btn-primary">
+                <i class="bi bi-plus"></i>
+                Create
+              </a> -->
+            </div>
+            <div class="card-body">
+              <table class="table table-striped" id="table1">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Game Name</th>
+                    <th>Item</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Player Name</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% transactions.forEach((item, i)=> { %>
+                  <tr>
+                    <td>
+                      <%= i + 1 %>
+                    </td>
+                    <td>
+                      <img src="<%= '/uploads/' + item.history.voucher.thumbnail %>" alt="<%= item.name %>"
+                        style="max-width: 40px;">
+                      <%= item.history.voucher.gameName %>
+
+                    </td>
+                    <td>
+                      <%= `${item.history.nominal.coinQuantitiy} ${item.history.nominal.coinName}` %>
+                    </td>
+                    <td>
+                      <%= item.nominal.price %>
+                    </td>
+                    <td>
+                      <% if (item.status === 'pending') { %>
+                      <div class="badge bg-warning">
+                        Pending
+                      </div>
+
+                      <% } else if (item.status === 'success') { %>
+                      <div class="badge bg-success">
+                        Success
+                      </div>
+
+                      <% } else if (item.status === 'failed') { %>
+                      <div class="badge bg-danger">
+                        Failed
+                      </div>
+                      <% } %>
+                    </td>
+                    <td>
+                      <%= item.player.name %>
+                    </td>
+                    <td>
+                      <form action="/voucher/status/<%= item.id %>?_method=PUT" method="POST">
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" data-action="submit-form" <%=item.active
+                                  ? 'checked' :'' %>>
+                          <label class="form-check-label">
+                            Active
+                          </label>
+                        </div>
+                      </form>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+      </div>
+      <%- include ../../partials/footer.ejs %>
+    </div>
+  </div>
+  <%- include ../../partials/javascripts.ejs %>
+  <script src="/assets/vendors/simple-datatables/simple-datatables.js"></script>
+  <script>
+    // Simple Datatable
+    let table1 = document.querySelector('#table1');
+    let dataTable = new simpleDatatables.DataTable(table1);
+
+    const togglerActivatedStatus = document.querySelectorAll('[data-action="submit-form"]');
+
+    togglerActivatedStatus?.forEach(node => {
+      node.addEventListener('change', e => {
+        e.preventDefault();
+        const isChecked = e.target.checked;
+        let form = node.closest('form');
+        form.submit();
+      });
+    });
+  </script>
+</body>
+
+</html>
