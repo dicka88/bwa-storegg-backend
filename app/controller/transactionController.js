@@ -13,83 +13,25 @@ module.exports = {
       }
     });
   },
-  viewCreate(req, res) {
-    res.render('admin/transaction/create', {
-      title: "Create Transaction",
-      alert: {
-        message: req.flash('alertMessage'),
-        status: req.flash('alertStatus')
-      }
-    });
-  },
-  async postCreate(req, res) {
-    try {
-      const { name } = req.body;
-
-      const category = new TransactionModel({ name });
-
-      await category.save();
-
-      req.flash('alertMessage', `Successfull create category`);
-      req.flash('alertStatus', 'success');
-      res.redirect('/category');
-    } catch (e) {
-      req.flash('alertMessage', `${e.message}`);
-      req.flash('alertStatus', 'danger');
-      res.redirect('back');
-    }
-  },
-  async viewDetail(req, res) {
-    const id = req.params.id;
+  async actionStatus(req, res) {
+    const { id } = req.params;
+    const { status } = req.body;
 
     try {
-      const category = await TransactionModel.findById(id);
+      // validate
+      if (!['success', 'failed'].includes(status)) throw new Error("Status is not valid");
 
-      if (!category) throw new Error("Category not found");
-
-      res.render('admin/category/detail', {
-        title: category.name,
-        category,
-        alert: {
-          message: req.flash('alertMessage'),
-          status: req.flash('alertStatus')
-        }
+      await TransactionModel.findByIdAndUpdate(id, {
+        status
       });
-    } catch (e) {
-      res.status(404).render("errors/404", { title: "Not found" });
-    }
 
-  },
-  async putDetail(req, res) {
-    const id = req.params.id;
-    const { name } = req.body;
-
-    try {
-      const update = await TransactionModel.findByIdAndUpdate(id, { name }, { runValidators: true });
-
-      req.flash('alertMessage', `Successfull update category`);
+      req.flash('alertMessage', `Successfull update transaction`);
       req.flash('alertStatus', 'success');
-      res.redirect('/category');
     } catch (e) {
-      req.flash('alertMessage', `${e.message}`);
-      req.flash('alertStatus', 'danger');
-      res.redirect('back');
+      req.flash('alertMessage', e.message);
+      req.flash('alertStatus', 'success');
     }
-  },
-  async deleteCategory(req, res) {
-    const id = req.params.id;
-    console.log({ id });
-    try {
-      const result = await TransactionModel.findByIdAndDelete(id);
 
-      req.flash('alertMessage', `Successfull remove category`);
-      req.flash('alertStatus', 'danger');
-      res.redirect('/category');
-    } catch (e) {
-      req.flash('alertMessage', `${e.message}`);
-      req.flash('alertStatus', 'danger');
-
-      res.redirect('/category');
-    }
+    res.redirect('/transaction');
   }
 }; 

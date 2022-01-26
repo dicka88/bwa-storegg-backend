@@ -91,15 +91,16 @@
                       <%= item.player.name %>
                     </td>
                     <td>
-                      <form action="/voucher/status/<%= item.id %>?_method=PUT" method="POST">
-                        <div class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" data-action="submit-form" <%=item.active
-                                  ? 'checked' :'' %>>
-                          <label class="form-check-label">
-                            Active
-                          </label>
-                        </div>
+                      <% if (item.status === 'pending') { %>
+                      <form action="/transaction/status/<%= item.id %>?_method=PUT" method="POST">
+                        <input type="hidden" name="status" value="success">
+                        <button class="btn btn-success">Accept</button>
                       </form>
+                      <form action="/transaction/status/<%= item.id %>?_method=PUT" method="POST">
+                        <input type="hidden" name="status" value="success">
+                        <button class="btn btn-danger">Reject</button>
+                      </form>
+                      <% } %>
                     </td>
                   </tr>
                   <% }) %>
