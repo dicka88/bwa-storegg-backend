@@ -6,7 +6,7 @@ module.exports = {
   async signin(req, res) {
     const { email, password } = req.body;
 
-    const player = await PlayerModel.findOne({ email });
+    const player = await PlayerModel.findOne({ email }).select('+password');
 
     if (!player) return res.status(404).json({
       message: "Player is not found"
@@ -17,6 +17,8 @@ module.exports = {
     if (!passwordMatch) return res.status(400).json({
       message: "Email or password is wrong"
     });
+
+    delete player._doc.password;
 
     return res.json({
       player
