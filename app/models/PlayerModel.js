@@ -1,14 +1,19 @@
+const { ObjectId } = require('mongodb');
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-
-// const { ObjectId } = mongoose.Types;
 
 const Schema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Name is required"]
   },
+  username: {
+    type: String,
+    unique: true
+  },
   password: {
     type: String,
+    select: false,
     required: [true, "Password is required"]
   },
   phoneNumber: {
@@ -20,10 +25,20 @@ const Schema = new mongoose.Schema({
   avatar: String,
   email: {
     type: String,
-    required: [true, "Password is required"]
+    required: [true, "Password is required"],
+    unique: true
+  },
+  favoriteGameCategory: {
+    type: ObjectId,
+    ref: 'category'
   }
 }, {
   timestamps: true
+});
+
+Schema.pre('save', function (next) {
+  this.password = bcrypt.hashSync(this.password);
+  next();
 });
 
 module.exports = mongoose.model('player', Schema);
