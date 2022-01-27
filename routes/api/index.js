@@ -30,6 +30,7 @@ router.use('/v1', (() => {
 
   router.get('/player/landingpage', playerController.landingPage);
   router.get('/player/detail/:id', playerController.detailPage);
+  router.get('/player/category', playerController.category);
 
   return router;
 })());
