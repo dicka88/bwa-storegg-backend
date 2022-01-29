@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken");
+const config = require('../../config');
+
 module.exports = {
   authenticate(req, res, next) {
 
@@ -12,5 +15,19 @@ module.exports = {
     res.locals.req = req;
 
     next();
+  },
+  jwtAuth(req, res, next) {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      const data = jwt.verify(token, config.secretKey);
+
+      req.player = data;
+
+      next();
+    } catch (err) {
+      res.status(401).json({
+        message: "Unauthorized"
+      });
+    }
   }
 };
