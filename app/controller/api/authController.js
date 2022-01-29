@@ -1,5 +1,6 @@
 const PlayerModel = require("../../models/PlayerModel");
 const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const config = require("../../../config");
 
 module.exports = {
@@ -14,14 +15,21 @@ module.exports = {
 
     const passwordMatch = bcryptjs.compareSync(password, player.password);
 
-    if (!passwordMatch) return res.status(400).json({
+    if (!passwordMatch) return res.status(403).json({
       message: "Email or password is wrong"
     });
 
     delete player._doc.password;
 
+    const token = jwt.sign({
+      id: player._id,
+      username: player.username,
+      name: player.name,
+      avatar: player.avatar
+    }, config.secretKey);
+
     return res.json({
-      player
+      token
     });
   },
   async signup(req, res) {
