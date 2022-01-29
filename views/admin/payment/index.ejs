@@ -65,7 +65,7 @@
                     <td>
                       <form action="/payment/status/<%= item.id %>?_method=PUT" method="POST">
                         <div class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" data-action="submit-form" <%=item.status
+                          <input class="form-check-input" type="checkbox" data-action="submit-form" <%=item.isActive
                                   ? 'checked' :'' %>>
                           <label class="form-check-label">
                             Active
