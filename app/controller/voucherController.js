@@ -44,7 +44,9 @@ module.exports = {
         thumbnail = req.file.filename;
       }
 
-      const voucher = new VoucherModel({ name, thumbnail, category, nominals });
+      const user = req.session.user.id;
+
+      const voucher = new VoucherModel({ name, thumbnail, category, nominals, user });
 
       await voucher.save();
 
