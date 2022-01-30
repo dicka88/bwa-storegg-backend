@@ -4,6 +4,7 @@ const TransactionModel = require('../../models/TransactionModel');
 const NominalModel = require('../../models/NominalModel');
 const BankModel = require('../../models/BankModel');
 const PaymentModel = require('../../models/PaymentModel');
+const { isValidObjectId } = require('mongoose');
 
 module.exports = {
   async landingPage(req, res) {
@@ -121,5 +122,42 @@ module.exports = {
       console.log(e);
       res.status(400).json({ message: e.message });
     }
+  },
+  async history(req, res) {
+    const playerId = req.player.id;
+    const { status } = req.query;
+
+    let criteria = {};
+
+    // query status
+    if (status) {
+      criteria['status'] = status;
+    }
+
+    const transactions = await TransactionModel.find({ ...criteria, player: playerId }).sort({ _id: -1 });
+
+    const totalNominal = transactions.reduce((prev, curr) => {
+      return prev + curr.value;
+    }, 0);
+
+    res.json({
+      total: totalNominal,
+      transactions,
+    });
+  },
+  async historyDetail(req, res) {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) return res.status(400).json({
+      message: "Id is not valid"
+    });
+
+    const transaction = await TransactionModel.findById(id);
+
+    if (!transaction) return res.status(404).json({
+      message: "Transaction is not found"
+    });
+
+    res.json(transaction);
   }
 };
