@@ -14,8 +14,7 @@ const schema = new mongoose.Schema({
       price: Number
     },
     payment: {
-      name: String,
-      type: String,
+      paymentType: String,
       bankName: String,
       bankAccountNumber: String
     },

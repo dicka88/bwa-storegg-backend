@@ -3,6 +3,7 @@ const path = require('path');
 const multer = require("multer");
 const authController = require("../../app/controller/api/authController");
 const playerController = require("../../app/controller/api/playerController");
+const authMiddleware = require("../../app/middleware/authMiddleware");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -31,6 +32,7 @@ router.use('/v1', (() => {
   router.get('/player/landingpage', playerController.landingPage);
   router.get('/player/detail/:id', playerController.detailPage);
   router.get('/player/category', playerController.category);
+  router.post('/player/checkout', authMiddleware.jwtAuth, playerController.checkout);
 
   return router;
 })());
