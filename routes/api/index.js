@@ -33,6 +33,7 @@ router.use('/v1', (() => {
   router.get('/player/detail/:id', playerController.detailPage);
   router.get('/player/category', playerController.category);
   router.post('/player/checkout', authMiddleware.jwtAuth, playerController.checkout);
+  router.get('/player/dashboard', authMiddleware.jwtAuth, playerController.dashboard);
   router.get('/player/history', authMiddleware.jwtAuth, playerController.history);
   router.get('/player/history/:id/detail', authMiddleware.jwtAuth, playerController.historyDetail);
 

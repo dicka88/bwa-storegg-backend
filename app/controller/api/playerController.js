@@ -4,7 +4,9 @@ const TransactionModel = require('../../models/TransactionModel');
 const NominalModel = require('../../models/NominalModel');
 const BankModel = require('../../models/BankModel');
 const PaymentModel = require('../../models/PaymentModel');
-const { isValidObjectId } = require('mongoose');
+const { isValidObjectId, Types } = require('mongoose');
+
+const { ObjectId } = Types;
 
 module.exports = {
   async landingPage(req, res) {
@@ -159,5 +161,40 @@ module.exports = {
     });
 
     res.json(transaction);
+  },
+  async dashboard(req, res) {
+    const playerId = req.player.id;
+
+    try {
+      const count = await TransactionModel
+        .aggregate([
+          { $match: { player: ObjectId(playerId) } },
+          {
+            $group: {
+              _id: "$category",
+              value: {
+                $sum: '$value'
+              }
+            }
+          }
+        ]);
+
+      await TransactionModel.populate(count, { path: 'category' });
+
+      const categories = (await CategoryModel.find()).concat([]);
+
+      count.forEach(async (item) => {
+        const category = categories.find(category => category._id = item._id);
+        item.name = category?.name;
+      });
+
+      res.json({
+        count
+      });
+    } catch (err) {
+      res.status(500).json({
+        message: err.message || "Internal server error"
+      });
+    }
   }
 };
