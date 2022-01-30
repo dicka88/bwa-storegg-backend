@@ -7,6 +7,7 @@ const logger = require('morgan');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
+const cors = require('cors');
 const MongoStore = require('connect-mongo');
 
 const apiRouter = require('./routes/api/index');
@@ -46,6 +47,7 @@ app.use(cookieParser());
 app.use(flash());
 
 // add CORS for specific domain
+app.use(cors());
 
 app.use(logger('dev'));
 app.use(express.json());
