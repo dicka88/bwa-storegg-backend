@@ -179,8 +179,6 @@ module.exports = {
           }
         ]);
 
-      await TransactionModel.populate(count, { path: 'category' });
-
       const categories = (await CategoryModel.find()).concat([]);
 
       count.forEach(async (item) => {
@@ -188,8 +186,14 @@ module.exports = {
         item.name = category?.name;
       });
 
+      const transactions = await TransactionModel
+        .find({ player: playerId })
+        .populate('category')
+        .sort({ createdAt: -1 });
+
       res.json({
-        count
+        count,
+        transactions
       });
     } catch (err) {
       res.status(500).json({
