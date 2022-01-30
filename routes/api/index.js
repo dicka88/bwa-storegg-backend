@@ -36,6 +36,8 @@ router.use('/v1', (() => {
   router.get('/player/dashboard', authMiddleware.jwtAuth, playerController.dashboard);
   router.get('/player/history', authMiddleware.jwtAuth, playerController.history);
   router.get('/player/history/:id/detail', authMiddleware.jwtAuth, playerController.historyDetail);
+  router.get('/player/profile', authMiddleware.jwtAuth, playerController.profile);
+  router.put('/player/profile', authMiddleware.jwtAuth, playerController.putProfile);
 
   return router;
 })());

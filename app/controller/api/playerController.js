@@ -5,6 +5,7 @@ const NominalModel = require('../../models/NominalModel');
 const BankModel = require('../../models/BankModel');
 const PaymentModel = require('../../models/PaymentModel');
 const { isValidObjectId, Types } = require('mongoose');
+const PlayerModel = require('../../models/PlayerModel');
 
 const { ObjectId } = Types;
 
@@ -194,6 +195,45 @@ module.exports = {
       res.json({
         count,
         transactions
+      });
+    } catch (err) {
+      res.status(500).json({
+        message: err.message || "Internal server error"
+      });
+    }
+  },
+  async profile(req, res) {
+    try {
+      const player = await PlayerModel.findById(req.player.id)
+        .select(`
+          id username name email avatar phoneNumber
+        `);
+
+      if (!player) return res.status(404).json({
+        message: "Player is not found"
+      });
+
+      res.json(player);
+    } catch (err) {
+      res.status(500).json({
+        message: err.message || "Internal server error"
+      });
+    }
+  },
+  async putProfile(req, res) {
+    try {
+      const { name, email, phoneNumber } = req.body;
+
+      const result = await PlayerModel.findByIdAndUpdate(req.player.id, {
+        name,
+        email,
+        phoneNumber
+      });
+
+      console.log({ result });
+
+      res.json({
+        message: "Profile has been changed"
       });
     } catch (err) {
       res.status(500).json({
