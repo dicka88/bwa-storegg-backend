@@ -1,15 +1,15 @@
 const { Router } = require("express");
 const multer = require("multer");
-const { default: slugify } = require("slugify");
 const path = require('path');
 
 const voucherController = require("../../app/controller/voucherController");
+const config = require("../../config");
 
 const router = new Router();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/uploads');
+    cb(null, 'public/uploads');
   },
   filename: function (req, file, cb) {
     const pathFile = path.parse(file.originalname);
