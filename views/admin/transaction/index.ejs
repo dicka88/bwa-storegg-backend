@@ -55,16 +55,15 @@
                       <%= i + 1 %>
                     </td>
                     <td>
-                      <img src="<%= '/uploads/' + item.history.voucher.thumbnail %>" alt="<%= item.name %>"
+                      <img src="<%= item.history.voucher.thumbnail.secure_url %>" alt="<%= item.name %>"
                         style="max-width: 40px;">
                       <%= item.history.voucher.gameName %>
-
                     </td>
                     <td>
-                      <%= `${item.history.nominal.coinQuantitiy} ${item.history.nominal.coinName}` %>
+                      <%= `${item.history.nominal.coinQuantity} ${item.history.nominal.coinName}` %>
                     </td>
                     <td>
-                      <%= item.nominal.price %>
+                      <%= item.history.nominal.price %>
                     </td>
                     <td>
                       <% if (item.status === 'pending') { %>
