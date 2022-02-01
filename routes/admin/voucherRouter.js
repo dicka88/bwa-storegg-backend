@@ -1,28 +1,13 @@
 const { Router } = require("express");
 const multer = require("multer");
-const path = require('path');
 
 const voucherController = require("../../app/controller/voucherController");
 const config = require("../../config");
+const { diskStorage } = require("../../config/multer");
 
 const router = new Router();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads');
-  },
-  filename: function (req, file, cb) {
-    const pathFile = path.parse(file.originalname);
-    const name = pathFile.name;
-    const ext = pathFile.ext;
-
-    const filename = `${name}-${Date.now()}${ext}`;
-
-    cb(null, filename);
-  }
-});
-
-const uploadThumbnail = multer({ storage }).single('thumbnail');
+const uploadThumbnail = multer({ storage: diskStorage() }).single('thumbnail');
 
 router.get('/', voucherController.index);
 router.get('/create', voucherController.viewCreate);
