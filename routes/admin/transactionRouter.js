@@ -4,6 +4,6 @@ const transactionController = require("../../app/controller/transactionControlle
 const router = new Router();
 
 router.get('/', transactionController.index);
-router.put('/status', transactionController.actionStatus);
+router.put('/status/:id', transactionController.actionStatus);
 
 module.exports = router;
