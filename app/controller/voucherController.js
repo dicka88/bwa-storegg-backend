@@ -117,11 +117,6 @@ module.exports = {
         const filePath = 'public/uploads/' + req.file.filename;
         const resCloudinary = await uploader.upload(filePath);
 
-        console.log({ voucher: voucher._doc });
-        if (voucher.thumbnail.public_id) {
-          uploader.destroy(voucher.thumbnail.public_id);
-        }
-
         voucher.thumbnail = {
           asset_id: resCloudinary.asset_id,
           public_id: resCloudinary.public_id,
