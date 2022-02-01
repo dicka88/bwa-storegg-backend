@@ -13,7 +13,7 @@ module.exports = {
       .sort({ _id: 1 });
 
     res.render('admin/voucher', {
-      title: "Nominal",
+      title: "Voucher",
       vouchers,
       alert: {
         message: req.flash('alertMessage'),

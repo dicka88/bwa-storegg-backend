@@ -8,7 +8,7 @@ module.exports = {
       .sort({ _id: 1 });
 
     res.render('admin/bank', {
-      title: "Nominal",
+      title: "Banks",
       banks,
       alert: {
         message: req.flash('alertMessage'),
