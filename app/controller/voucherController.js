@@ -1,5 +1,6 @@
+const { uploader } = require("cloudinary").v2;
+
 const CategoryModel = require("../models/CategoryModel");
-const { deleteOne } = require("../models/NominalModel");
 const NominalModel = require("../models/NominalModel");
 const VoucherModel = require("../models/VoucherModel");
 
@@ -41,7 +42,20 @@ module.exports = {
       let thumbnail = null;
 
       if (req.file) {
-        thumbnail = req.file.filename;
+        const filePath = 'public/uploads/' + req.file.filename;
+        const resCloudinary = await uploader.upload(filePath);
+        thumbnail = {
+          asset_id: resCloudinary.asset_id,
+          public_id: resCloudinary.public_id,
+          bytes: resCloudinary.bytes,
+          width: resCloudinary.width,
+          height: resCloudinary.height,
+          format: resCloudinary.format,
+          created_at: resCloudinary.created_at,
+          url: resCloudinary.url,
+          secure_url: resCloudinary.secure_url,
+          original_filename: resCloudinary.original_filename,
+        };
       }
 
       const user = req.session.user.id;
@@ -55,6 +69,7 @@ module.exports = {
 
       res.redirect('/voucher');
     } catch (e) {
+      console.log(e);
       req.flash('alertMessage', `${e.message}`);
       req.flash('alertStatus', 'danger');
       res.redirect('back');
@@ -90,19 +105,42 @@ module.exports = {
     const id = req.params.id;
     const { name, category, nominals } = req.body;
 
-    let additonal = {};
-
-    if (req.file) {
-      additonal = {
-        thumbnail: req.file.filename
-      };
-    }
-
     try {
-      const update = await VoucherModel.findByIdAndUpdate(id,
-        { name, category, nominals, ...additonal },
-        { runValidators: true }
-      );
+      const voucher = await VoucherModel.findById(id);
+
+      if (!voucher) res.status(404).json({
+        message: "Voucher is not found"
+      });
+
+
+      if (req.file) {
+        const filePath = 'public/uploads/' + req.file.filename;
+        const resCloudinary = await uploader.upload(filePath);
+
+        console.log({ voucher: voucher._doc });
+        if (voucher.thumbnail.public_id) {
+          uploader.destroy(voucher.thumbnail.public_id);
+        }
+
+        voucher.thumbnail = {
+          asset_id: resCloudinary.asset_id,
+          public_id: resCloudinary.public_id,
+          bytes: resCloudinary.bytes,
+          width: resCloudinary.width,
+          height: resCloudinary.height,
+          format: resCloudinary.format,
+          created_at: resCloudinary.created_at,
+          url: resCloudinary.url,
+          secure_url: resCloudinary.secure_url,
+          original_filename: resCloudinary.original_filename,
+        };
+      }
+
+      voucher.name = name;
+      voucher.category = category;
+      voucher.nominals = nominals;
+
+      await voucher.save();
 
       req.flash('alertMessage', `Successfull update voucher`);
       req.flash('alertStatus', 'success');

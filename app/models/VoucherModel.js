@@ -12,7 +12,16 @@ const Schema = new mongoose.Schema({
     default: true
   },
   thumbnail: {
-    type: String
+    asset_id: String,
+    public_id: String,
+    bytes: Number,
+    width: Number,
+    height: Number,
+    format: String,
+    created_at: String,
+    url: String,
+    secure_url: String,
+    original_filename: String,
   },
   category: {
     type: ObjectId,
