@@ -1,6 +1,6 @@
 const { uploader } = require("cloudinary").v2;
 
-const slugify = require("slugify");
+const { default: slugify } = require("slugify");
 const CategoryModel = require("../models/CategoryModel");
 const NominalModel = require("../models/NominalModel");
 const VoucherModel = require("../models/VoucherModel");
@@ -61,7 +61,11 @@ module.exports = {
 
       const user = req.session.user.id;
 
-      const slug = slugify(name, '-');
+      const slug = slugify(name, {
+        lower: true,
+        replacement: '-',
+        trim: true
+      });
 
       const voucher = new VoucherModel({ name, slug, thumbnail, category, nominals, user });
 
@@ -134,7 +138,15 @@ module.exports = {
         };
       }
 
+      const slug = slugify(name, {
+        lower: true,
+        replacement: '-',
+        trim: true
+      });
+
+
       voucher.name = name;
+      voucher.slug = slug;
       voucher.category = category;
       voucher.nominals = nominals;
 
