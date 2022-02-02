@@ -34,7 +34,20 @@ module.exports = {
   async detailPage(req, res) {
     try {
       const { id } = req.params;
-      const voucher = await VoucherModel.findById(id)
+
+      const criteria = [
+        { slug: id }
+      ];
+
+      if (isValidObjectId(id)) {
+        criteria.push({
+          _id: id
+        });
+      }
+
+      const voucher = await VoucherModel.findOne({
+        $or: criteria
+      })
         .populate('category', 'name -_id')
         .populate('nominals')
         .populate('user', '_id name phoneNumber');
