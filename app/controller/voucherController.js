@@ -1,5 +1,6 @@
 const { uploader } = require("cloudinary").v2;
 
+const slugify = require("slugify");
 const CategoryModel = require("../models/CategoryModel");
 const NominalModel = require("../models/NominalModel");
 const VoucherModel = require("../models/VoucherModel");
@@ -60,7 +61,9 @@ module.exports = {
 
       const user = req.session.user.id;
 
-      const voucher = new VoucherModel({ name, thumbnail, category, nominals, user });
+      const slug = slugify(name, '-');
+
+      const voucher = new VoucherModel({ name, slug, thumbnail, category, nominals, user });
 
       await voucher.save();
 

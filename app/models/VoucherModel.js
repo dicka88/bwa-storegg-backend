@@ -7,6 +7,10 @@ const Schema = new mongoose.Schema({
     type: String,
     required: [true, "Name is required"]
   },
+  slug: {
+    type: String,
+    required: [true, "Slug is required"]
+  },
   active: {
     type: Boolean,
     default: true
