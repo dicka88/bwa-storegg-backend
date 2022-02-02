@@ -15,7 +15,7 @@ module.exports = {
       const vouchers = await VoucherModel
         .find()
         .select(`
-          _id name thumbnail active category
+          _id name slug thumbnail active category
         `)
         .where({
           active: true
