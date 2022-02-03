@@ -56,7 +56,12 @@ module.exports = {
         message: "Voucher game is not found"
       });
 
-      res.json(voucher);
+      const payment = await PaymentModel.find();
+
+      res.json({
+        voucher,
+        payment
+      });
     } catch (e) {
       res.status(500).json({
         message: e.message || "Internal server error"
