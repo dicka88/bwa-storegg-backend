@@ -56,7 +56,7 @@ module.exports = {
         message: "Voucher game is not found"
       });
 
-      const payment = await PaymentModel.find();
+      const payment = await PaymentModel.find().populate('banks');
 
       res.json({
         voucher,
