@@ -4,22 +4,9 @@ const multer = require("multer");
 const authController = require("../../app/controller/api/authController");
 const playerController = require("../../app/controller/api/playerController");
 const authMiddleware = require("../../app/middleware/authMiddleware");
+const { diskStorage } = require("../../config/multer");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './public/images/avatar');
-  },
-  filename: function (req, file, cb) {
-    const pathFile = path.parse(file.originalname);
-    const ext = pathFile.ext;
-
-    const filename = `${Date.now()}${ext}`;
-
-    cb(null, filename);
-  }
-});
-
-const multerAvatar = multer({ storage }).single('avatar');
+const multerAvatar = multer({ storage: diskStorage() }).single('avatar');
 
 const router = new Router();
 

@@ -2,6 +2,7 @@ const PlayerModel = require("../../models/PlayerModel");
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require("../../../config");
+const { uploader } = require('cloudinary').v2;
 
 module.exports = {
   async signin(req, res) {
@@ -45,7 +46,21 @@ module.exports = {
       let avatar = null;
 
       if (req.file) {
-        avatar = req.file.filename;
+        const filePath = `public/uploads/${req.file.filename}`;
+
+        const resCloudinary = await uploader.upload(filePath);
+        avatar = {
+          asset_id: resCloudinary.asset_id,
+          public_id: resCloudinary.public_id,
+          bytes: resCloudinary.bytes,
+          width: resCloudinary.width,
+          height: resCloudinary.height,
+          format: resCloudinary.format,
+          created_at: resCloudinary.created_at,
+          url: resCloudinary.url,
+          secure_url: resCloudinary.secure_url,
+          original_filename: resCloudinary.original_filename,
+        };
       }
 
       const result = await PlayerModel.create({
@@ -63,9 +78,14 @@ module.exports = {
         message: "Success",
         result
       });
-    } catch (e) {
+    } catch (err) {
+      if (err.name == 'ValidationError') return res.status(422).json({
+        message: err.message,
+        fields: err.errors
+      });
+
       res.status(500).json({
-        message: e.message || "Internal server error"
+        message: err.message || "Internal server error"
       });
     }
   }
