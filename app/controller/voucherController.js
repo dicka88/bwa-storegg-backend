@@ -38,7 +38,7 @@ module.exports = {
   },
   async postCreate(req, res) {
     try {
-      const { name, category, nominals } = req.body;
+      const { name, category } = req.body;
 
       let thumbnail = null;
 
@@ -67,7 +67,7 @@ module.exports = {
         trim: true
       });
 
-      const voucher = new VoucherModel({ name, slug, thumbnail, category, nominals, user });
+      const voucher = new VoucherModel({ name, slug, thumbnail, category, user });
 
       await voucher.save();
 
@@ -85,12 +85,13 @@ module.exports = {
   async viewDetail(req, res) {
     const id = req.params.id;
     const categories = await CategoryModel.find();
-    const nominals = await NominalModel.find();
 
     try {
       const voucher = await VoucherModel.findById(id)
         .populate('category')
         .populate('nominals');
+
+      const nominals = voucher.nominals;
 
       if (!voucher) throw new Error("Voucher not found");
 
@@ -110,7 +111,7 @@ module.exports = {
   },
   async putDetail(req, res) {
     const id = req.params.id;
-    const { name, category, nominals } = req.body;
+    const { name, category } = req.body;
 
     try {
       const voucher = await VoucherModel.findById(id);
@@ -148,7 +149,6 @@ module.exports = {
       voucher.name = name;
       voucher.slug = slug;
       voucher.category = category;
-      voucher.nominals = nominals;
 
       await voucher.save();
 
@@ -194,6 +194,94 @@ module.exports = {
       req.flash('alertStatus', 'danger');
 
       res.redirect('/voucher');
+    }
+  },
+  async viewNominalDetail(req, res) {
+    const { id, nominalId } = req.params;
+
+    try {
+      const nominal = await NominalModel.findById(nominalId);
+
+      if (!nominal) throw new Error("Nominal not found");
+
+      res.render('admin/nominal/detail', {
+        title: nominal.name,
+        id,
+        nominal,
+        alert: {
+          message: req.flash('alertMessage'),
+          status: req.flash('alertStatus')
+        }
+      });
+    } catch (e) {
+      res.status(404).render("errors/404", { title: "Not found" });
+    }
+  },
+  async postNominal(req, res) {
+    try {
+      const { id } = req.params;
+      const { coinQuantity, coinName, price } = req.body;
+
+      const category = new NominalModel({ coinQuantity, coinName, price });
+
+      await category.save();
+
+      await VoucherModel.findByIdAndUpdate(id, {
+        $push: {
+          nominals: category.id
+        }
+      });
+
+      req.flash('alertMessage', `Successfull create nominal`);
+      req.flash('alertStatus', 'success');
+      res.redirect('back');
+    } catch (e) {
+      req.flash('alertMessage', `${e.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('back');
+    }
+  },
+  async updateNominal(req, res) {
+    const { id, nominalId } = req.params;
+    const { coinQuantity, coinName, price } = req.body;
+
+    try {
+      await NominalModel.findByIdAndUpdate(nominalId,
+        { coinQuantity, coinName, price },
+        { runValidators: true }
+      );
+
+      req.flash('alertMessage', `Successfull update nominal`);
+      req.flash('alertStatus', 'success');
+      res.redirect('/voucher/' + id);
+    } catch (e) {
+      req.flash('alertMessage', `${e.message}`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('back');
+    }
+  },
+  async deleteNominal(req, res) {
+    const { id, nominalId } = req.params;
+
+    try {
+      const result = await NominalModel.findByIdAndDelete(nominalId);
+
+      await VoucherModel.findByIdAndUpdate(id, {
+        $pull: {
+          nominals: {
+            _id: nominalId
+          }
+        }
+      });
+
+      req.flash('alertMessage', `Successfull remove nominal`);
+      req.flash('alertStatus', 'danger');
+      res.redirect('/voucher/' + id);
+    } catch (e) {
+      req.flash('alertMessage', `${e.message}`);
+      req.flash('alertStatus', 'danger');
+
+      res.redirect('back');
     }
   }
 };

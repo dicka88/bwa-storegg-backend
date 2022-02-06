@@ -25,8 +25,9 @@
               <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                 <ol class="breadcrumb">
                   <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
-                  <li class="breadcrumb-item"><a href="/nominal">Nominal</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Create</li>
+                  <li class="breadcrumb-item"><a href="/Voucher">Voucher</a></li>
+                  <li class="breadcrumb-item"><a href="/id">Game name</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Detail</li>
                 </ol>
               </nav>
             </div>
@@ -39,7 +40,7 @@
             </div>
             <div class="card-body">
               <div class="col-6">
-                <form action="/nominal/<%= nominal.id %>?_method=PUT" method="POST">
+                <form action="/voucher/<%= id %>/nominal/<%= nominal.id %>?_method=PUT" method="POST">
                   <div class="form-group">
                     <label for="basicInput">Coin name</label>
                     <input type="text" name="coinName" value="<%= nominal.coinName %>" class="form-control"
@@ -95,7 +96,7 @@
             <i class="bx bx-x d-block d-sm-none"></i>
             <span class="d-none d-sm-block">Close</span>
           </button>
-          <form action="/nominal/<%= nominal._id %>?_method=DELETE" method="POST">
+          <form action="/voucher/<%= id %>/nominal/<%= nominal.id %>?_method=DELETE" method="POST">
             <button type="submit" class="btn btn-danger ml-1">
               <i class="bx bx-check d-block d-sm-none"></i>
               <span class="d-none d-sm-block">Remove now</span>

@@ -58,18 +58,6 @@
                         <% }) %>
                       </select>
                     </div>
-                    <div class="form-group">
-                      <label>Nominal</label>
-                      <select class="form-select choices multiple-remove" placeholder="Select nominal"
-                        multiple="multiple" name="nominals">
-                        <option placeholder>This is a placeholder</option>
-                        <% nominals.forEach(nominal=> { %>
-                        <option value="<%= nominal.id %>">
-                          <%= `${nominal.coinQuantity} ${nominal.coinName} - ${nominal.price}` %>
-                        </option>
-                        <% }) %>
-                      </select>
-                    </div>
                     <button type="submit" class="btn btn-primary">Create</button>
                   </form>
                 </div>

@@ -62,19 +62,6 @@
                         <% }) %>
                       </select>
                     </div>
-                    <div class="form-group">
-                      <label>Nominal</label>
-                      <select class="form-select choices multiple-remove" placeholder="Select nominal"
-                        multiple="multiple" name="nominals">
-                        <option placeholder>Select nominal</option>
-                        <% nominals.forEach(nominal=> { %>
-                        <option value="<%= nominal.id %>" <%=voucher.nominals.map(item=>
-                                item.id).includes(nominal.id) ? 'selected' : '' %>>
-                          <%= `${nominal.coinQuantity} ${nominal.coinName} - ${nominal.price}` %>
-                        </option>
-                        <% }) %>
-                      </select>
-                    </div>
                     <div class="d-flex justify-content-between">
                       <button type="submit" class="btn btn-primary">Update</button>
                       <button type="button" class="btn btn-outline-danger block" data-bs-toggle="modal"
@@ -83,6 +70,58 @@
                       </button>
                     </div>
                   </form>
+                  <div class="my-4">
+                    <table class="table table-striped" id="table1">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Coin Name</th>
+                          <th>Coin Quantity</th>
+                          <th>Price</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% nominals.forEach((item, i)=> { %>
+                        <tr>
+                          <td>
+                            <%= i + 1 %>
+                          </td>
+                          <td>
+                            <%= item.coinName %>
+                          </td>
+                          <td>
+                            <%= item.coinQuantity %>
+                          </td>
+                          <td>
+                            <%= item.price %>
+                          </td>
+                          <td>
+                            <a href="/voucher/<%= voucher.id %>/nominal/<%= item._id %>">Detail</a>
+                          </td>
+                        </tr>
+                        <% }) %>
+                        <tr>
+                          <form action="/voucher/<%= voucher.id %>/nominal" method="POST">
+                            <input type="hidden" name="voucherId" value="<%= voucher._id %>">
+                            <td><%= nominals.length + 1 %></td>
+                            <td>
+                              <input class="form-control" type="text" placeholder="Coin name" name="coinName">
+                            </td>
+                            <td>
+                              <input class="form-control" type="number" placeholder="Coin quantity" name="coinQuantity">
+                            </td>
+                            <td>
+                              <input class="form-control" type="number" placeholder="Price" name="price">
+                            </td>
+                            <td>
+                              <button class="btn btn-sm btn-success">Save</button>
+                            </td>
+                          </form>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div class="col-6">
                   <img class="w-75" src="<%= voucher.thumbnail.secure_url %>" id="thumbnail_preview" alt="">
