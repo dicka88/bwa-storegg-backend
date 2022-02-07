@@ -106,10 +106,12 @@
                             <input type="hidden" name="voucherId" value="<%= voucher._id %>">
                             <td><%= nominals.length + 1 %></td>
                             <td>
-                              <input class="form-control" type="text" placeholder="Coin name" name="coinName">
+                              <input class="form-control" type="text" placeholder="Coin name"
+                                value="<%= nominals.length ? nominals[0].coinName : null %>" name="coinName">
                             </td>
                             <td>
-                              <input class="form-control" type="number" placeholder="Coin quantity" name="coinQuantity">
+                              <input class="form-control" type="number" autofocus placeholder="Coin quantity"
+                                name="coinQuantity">
                             </td>
                             <td>
                               <input class="form-control" type="number" placeholder="Price" name="price">
