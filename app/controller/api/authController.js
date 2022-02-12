@@ -25,6 +25,7 @@ module.exports = {
     const token = jwt.sign({
       id: player._id,
       username: player.username,
+      email: player.email,
       name: player.name,
       avatar: player.avatar
     }, config.secretKey);
