@@ -27,7 +27,8 @@ module.exports = {
       username: player.username,
       email: player.email,
       name: player.name,
-      avatar: player.avatar
+      avatar: player.avatar,
+      phoneNumber: player.phoneNumber
     }, config.secretKey);
 
     return res.json({
