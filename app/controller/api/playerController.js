@@ -6,6 +6,9 @@ const BankModel = require('../../models/BankModel');
 const PaymentModel = require('../../models/PaymentModel');
 const { isValidObjectId, Types } = require('mongoose');
 const PlayerModel = require('../../models/PlayerModel');
+const config = require('../../../config');
+const { uploader } = require('cloudinary').v2;
+const jwt = require('jsonwebtoken');
 
 const { ObjectId } = Types;
 
@@ -244,15 +247,48 @@ module.exports = {
     try {
       const { name, email, phoneNumber } = req.body;
 
-      const result = await PlayerModel.findByIdAndUpdate(req.player.id, {
+      let additional = {};
+
+      console.log(req.file);
+      if (req.file) {
+        const filePath = `public/uploads/${req.file.filename}`;
+
+        const resCloudinary = await uploader.upload(filePath);
+        additional.avatar = {
+          asset_id: resCloudinary.asset_id,
+          public_id: resCloudinary.public_id,
+          bytes: resCloudinary.bytes,
+          width: resCloudinary.width,
+          height: resCloudinary.height,
+          format: resCloudinary.format,
+          created_at: resCloudinary.created_at,
+          url: resCloudinary.url,
+          secure_url: resCloudinary.secure_url,
+          original_filename: resCloudinary.original_filename,
+        };
+      }
+
+      await PlayerModel.findByIdAndUpdate(req.player.id, {
         name,
         email,
-        phoneNumber
+        phoneNumber,
+        ...additional
       });
 
-      console.log({ result });
+      const player = await PlayerModel.findById(req.player.id);
+
+      const token = jwt.sign({
+        id: player._id,
+        username: player.username,
+        email: player.email,
+        name: player.name,
+        avatar: player.avatar,
+        phoneNumber: player.phoneNumber
+      }, config.secretKey);
 
       res.json({
+        data: player,
+        token,
         message: "Profile has been changed"
       });
     } catch (err) {
