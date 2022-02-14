@@ -77,7 +77,7 @@ module.exports = {
   },
   async checkout(req, res) {
     try {
-      const { accountUser, name, nominalId, voucherId, paymentId, bankId } = req.body;
+      const { name, nominalId, voucherId, paymentId, bankId } = req.body;
 
       const voucher = await VoucherModel.findById(voucherId)
         .select("_id name category thumbnail user")
@@ -96,6 +96,7 @@ module.exports = {
       // bank
       const bank = await BankModel.findById(bankId);
       if (!bank) return res.status(404).json({ message: "Bank is not found" });
+
       // Based on policy tax is 10%
       const tax = (10 / 100) * nominal.price;
       const value = nominal.price - tax;
@@ -125,6 +126,7 @@ module.exports = {
             phoneNumber: voucher.user.phoneNumber
           }
         },
+        verifyId,
         name,
         tax,
         value,
@@ -201,7 +203,7 @@ module.exports = {
       const categories = (await CategoryModel.find()).concat([]);
 
       count.forEach(async (item) => {
-        const category = categories.find(category => category._id = item._id);
+        const category = await categories.find(category => category._id = item._id);
         item.name = category?.name;
       });
 

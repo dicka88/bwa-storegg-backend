@@ -6,7 +6,18 @@ const schema = new mongoose.Schema({
     voucher: {
       gameName: String,
       category: String,
-      thumbnail: String,
+      thumbnail: {
+        asset_id: String,
+        public_id: String,
+        bytes: Number,
+        width: Number,
+        height: Number,
+        format: String,
+        created_at: String,
+        url: String,
+        secure_url: String,
+        original_filename: String,
+      },
     },
     nominal: {
       coinName: String,
@@ -23,8 +34,12 @@ const schema = new mongoose.Schema({
     },
     user: {
       name: String,
-      phoneNumber: Number
+      phoneNumber: String
     }
+  },
+  verifyId: {
+    type: String,
+    required: [true, "VerifyId is required"]
   },
   name: {
     type: String,
