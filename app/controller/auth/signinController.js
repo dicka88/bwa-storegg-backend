@@ -6,10 +6,10 @@ module.exports = {
   index(req, res) {
     if (req.session.user) {
       req.flash('alreadyLogged', "You already logged, no need to signin again");
-      res.redirect('/dashboard');
-    }
+      return res.redirect('/dashboard');
+    } 
 
-    res.render('admin/auth/signin', {
+    return res.render('admin/auth/signin', {
       alert: {
         message: req.flash('alertMessage'),
         status: req.flash('alertStatus')
@@ -37,12 +37,12 @@ module.exports = {
         loggedAt: new Date().toJSON()
       };
 
-      res.redirect('/dashboard');
+      return res.redirect('/dashboard');
     } catch (e) {
       req.flash('alertMessage', `${e.message}`);
       req.flash('alertStatus', 'danger');
 
-      res.redirect('/');
+      return res.redirect('/');
     }
   }
 };
