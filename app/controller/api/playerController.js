@@ -80,7 +80,7 @@ module.exports = {
   },
   async checkout(req, res) {
     try {
-      const { name, nominalId, voucherId, paymentId, bankId } = req.body;
+      const { name, verifyId, nominalId, voucherId, paymentId, bankId } = req.body;
 
       const voucher = await VoucherModel.findById(voucherId)
         .select("_id name category thumbnail user")
